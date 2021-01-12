@@ -4,9 +4,7 @@
 
 ;;; Code:
 
-					;(require 'url)
 (require 'fuzzy-finder)
-(require 'request)
 (require 'hydra)
 (require 'dash)
 

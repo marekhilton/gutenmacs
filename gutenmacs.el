@@ -111,6 +111,7 @@
   (switch-to-buffer (url-retrieve-synchronously url t))
   (fundamental-mode)
   (read-only-mode)
+  (set-buffer-multibyte t)
   (rename-buffer "Hello"))
   
 

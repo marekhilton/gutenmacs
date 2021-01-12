@@ -47,6 +47,7 @@
 
 (defun gutenmacs-search-index ()
   (fuzzy-finder :action (lambda (l)
+			  (kill-buffer (format "*%s*" fuzzy-finder--process-name))
 			  (gutenmacs-visit-index-entry
 			   (gutenmacs-gen-index-url (car l))))
 		:input-command (format "cat %s" index-file)))

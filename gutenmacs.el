@@ -110,8 +110,11 @@
 
 
 (defun gutenmacs-open-text (url)
-  (switch-to-buffer
-   (url-retrieve-synchronously url t)))
+  (switch-to-buffer (url-retrieve-synchronously url t))
+  (fundamental-mode)
+  (read-only-mode)
+  (rename-buffer "Hello"))
+  
 
 (provide 'gutenmacs)
 ;;; gutenberg.el ends here

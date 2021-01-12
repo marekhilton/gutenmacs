@@ -96,7 +96,7 @@
 		       (gutenmacs-open-text
 			(concat ,(file-name-as-directory url) filename))))
 	 (files (-distinct
-		 (gutenmacs-find-all-matches "\\([0-9]+.txt\\)" html)))
+		 (gutenmacs-find-all-matches "\\([0-9\-]+.txt\\)" html)))
 	 (files-info (gutenmacs-hydra-file-ents open-func files))
 	 (file-open-funcs (mapcar 'cdr files-info))
 	 (files-labels

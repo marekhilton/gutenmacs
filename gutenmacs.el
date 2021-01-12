@@ -110,10 +110,11 @@
 
 (defun gutenmacs-open-text (url)
   (switch-to-buffer (url-retrieve-synchronously url t))
+  (delete-trailing-whitespace)
   (fundamental-mode)
   (read-only-mode)
   (set-buffer-multibyte t)
-  (rename-buffer "Hello"))
+  (rename-buffer "Gutenberg"))
   
 
 (provide 'gutenmacs)

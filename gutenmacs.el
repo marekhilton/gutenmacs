@@ -118,4 +118,4 @@
   
 
 (provide 'gutenmacs)
-;;; gutenberg.el ends here
+;;; gutenmacs.el ends here

@@ -4,9 +4,10 @@
 
 ;;; Code:
 
-(require 'fuzzy-finder)
 (require 'hydra)
 (require 'dash)
+
+(require 'gutenmacs-fzf)
 
 (defconst data-dir
   (let ((dir (expand-file-name "./data/")))
@@ -43,14 +44,9 @@
 
 (defun gutenmacs ()
   (interactive)
-  (gutenmacs-search-index))
-
-(defun gutenmacs-search-index ()
-  (fuzzy-finder :action (lambda (l)
-			  (kill-buffer (format "*%s*" fuzzy-finder--process-name))
-			  (gutenmacs-visit-index-entry
-			   (gutenmacs-gen-index-url (car l))))
-		:input-command (format "cat %s" index-file)))
+  (let* ((index-entry (gutenmacs-fzf index-file))
+	 (entry-url (gutenmacs-gen-index-url index-entry)))
+    (gutenmacs-visit-index-entry entry-url)))
 
 (defun gutenmacs-expand-index (index)
   (let ((index-terms
@@ -62,6 +58,7 @@
 (defun gutenmacs-visit-index-entry (index-url)
   (with-current-buffer (url-retrieve-synchronously index-url)
     (gutenmacs-choose-dialog index-url (buffer-string))))
+
 
 
 (defun gutenmacs-gen-index-url (entry)

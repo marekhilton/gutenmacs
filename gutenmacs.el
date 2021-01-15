@@ -19,17 +19,17 @@
   "GUTINDEX.ALL")
   
 
-(defcustom mirror-url
+(defcustom gutenmacs-mirror-url
   "http://mirror.csclub.uwaterloo.ca/gutenberg/"
   "Mirror URL."
   :type 'string
   :group 'gutenmacs)
-(defcustom index-url
+(defcustom gutenmacs-index-url
   "http://mirror.csclub.uwaterloo.ca/gutenberg/GUTINDEX.ALL"
   "URL of full gutenberg index."
   :type 'string
   :group 'gutenmacs)
-(defcustom index-file
+(defcustom gutenmacs-index-file
   (concat (file-name-as-directory data-dir) "index")
   "File containing index"
   :type 'string
@@ -47,16 +47,16 @@
        "Please install the following and make sure they are available on PATH: %s"
        (mapconcat 'identity executables ", "))))
 
-  (url-copy-file (concat (file-name-as-directory mirror-url) url-index-name)
-		 index-file t)
+  (url-copy-file (concat (file-name-as-directory gutenmacs-mirror-url) url-index-name)
+		 gutenmacs-index-file t)
   (shell-command
-   (format "./strip %s | sponge %s" index-file index-file)))
+   (format "./strip %s | sponge %s" gutenmacs-index-file gutenmacs-index-file)))
 
 (defun gutenmacs ()
   "Main function to search through index file and subsequently
 visit the index entry."
   (interactive)
-  (let* ((index-entry (gutenmacs-fzf index-file))
+  (let* ((index-entry (gutenmacs-fzf gutenmacs-index-file))
 	 (entry-url (gutenmacs-gen-index-url index-entry)))
     (gutenmacs-visit-index-entry entry-url)))
 
@@ -79,9 +79,7 @@ number into the directory path."
 	 (expanded-index
 	  (gutenmacs-expand-index index)))
     (message
-     (concat (file-name-as-directory mirror-url) expanded-index))))
-
-(global-set-key (kbd "C-c n") 'gutenmacs)
+     (concat (file-name-as-directory gutenmacs-mirror-url) expanded-index))))
 
 
 ;; Functions for visiting an index entry and selecting an appropriate

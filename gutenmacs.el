@@ -39,6 +39,14 @@
 
 (defun gutenmacs-get-index ()
   (interactive)
+  (let ((executables
+	 (-filter (lambda (x) (not (executable-find x))) '("sed" "sponge"))))
+    (if (null executables)
+	()
+      (user-error
+       "Please install the following and make sure they are available on PATH: %s"
+       (mapconcat 'identity executables ", "))))
+
   (url-copy-file (concat (file-name-as-directory mirror-url) url-index-name)
 		 index-file t)
   (shell-command

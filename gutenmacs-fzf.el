@@ -8,6 +8,7 @@
 (require 'dash)
 
 (defconst gutenmacs-fzf-procname "gutenmacs-fzf-process")
+(defconst gutenmacs-fzf-exe "fzf")
 (defvar gutenmacs-fzf-result nil)
 
 (defun gutenmacs-fzf-after-term-handle-exit (proc-name msg)
@@ -20,11 +21,14 @@
     (setq unread-command-events (listify-key-sequence "\n"))))
 
 (defun gutenmacs-fzf (filename)
+  (unless (executable-find gutenmacs-fzf-exe)
+    (user-error "Please ensure fzf is installed and PATH"))
+  
   (advice-add 'term-handle-exit :after #'gutenmacs-fzf-after-term-handle-exit)
   (switch-to-buffer
    (make-term gutenmacs-fzf-procname
 	      shell-file-name nil shell-command-switch
-	      (format "cat %s | fzf" filename)))
+	      (format "cat %s | %s" filename gutenmacs-fzf-exe)))
   (term-char-mode)
   (visual-line-mode 0)
   (linum-mode 0)

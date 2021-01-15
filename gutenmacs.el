@@ -35,6 +35,8 @@
   :type 'string
   :group 'gutenmacs)
 
+;; Main interactive  gutenmacs functions
+
 (defun gutenmacs-get-index ()
   (interactive)
   (url-copy-file (concat (file-name-as-directory mirror-url) url-index-name)
@@ -43,25 +45,27 @@
    (format "./strip %s | sponge %s" index-file index-file)))
 
 (defun gutenmacs ()
+  "Main function to search through index file and subsequently
+visit the index entry."
   (interactive)
   (let* ((index-entry (gutenmacs-fzf index-file))
 	 (entry-url (gutenmacs-gen-index-url index-entry)))
     (gutenmacs-visit-index-entry entry-url)))
 
+
+;; Functions to generate index entry url
+
 (defun gutenmacs-expand-index (index)
+  "Helper function for gutenmacs-gen-index-url to turn an index
+number into the directory path."
   (let ((index-terms
 	 (append
 	  (butlast (mapcar #'char-to-string (string-to-list index)))
 	  (list index))))
     (file-name-as-directory (mapconcat #'identity index-terms "/"))))
 
-(defun gutenmacs-visit-index-entry (index-url)
-  (with-current-buffer (url-retrieve-synchronously index-url)
-    (gutenmacs-choose-dialog index-url (buffer-string))))
-
-
-
 (defun gutenmacs-gen-index-url (entry)
+  "Generates url for a particular entry (line) of the index file"
   (let* ((index (progn (string-match "\\([0-9]+\\)" entry)
 		       (message (match-string 0 entry))))
 	 (expanded-index
@@ -70,6 +74,15 @@
      (concat (file-name-as-directory mirror-url) expanded-index))))
 
 (global-set-key (kbd "C-c n") 'gutenmacs)
+
+
+;; Functions for visiting an index entry and selecting an appropriate
+;; text file to open
+
+(defun gutenmacs-visit-index-entry (index-url)
+  (with-current-buffer (url-retrieve-synchronously index-url)
+    (gutenmacs-choose-dialog index-url (buffer-string))))
+
 
 (defun gutenmacs-find-all-matches (pattern str)
   (if (string-match pattern str)

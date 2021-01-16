@@ -10,9 +10,10 @@
 (require 'gutenmacs-fzf)
 
 (defconst data-dir
-  (let ((dir (expand-file-name "./data/")))
+  (let ((dir (expand-file-name "~/.emacs.d/.cache/gutenmacs/data/")))
     (unless (file-directory-p dir)
-      (make-directory dir))
+
+      (make-directory dir t))
     dir))
 
 (defconst url-index-name

@@ -39,6 +39,7 @@ fzf search."
 	 (choice (string-trim-left (car selects) "\s*>\s+")))
     (setq gutenmacs-fzf-result choice)
     (kill-buffer)
+    ;; enqueue "\n" to signal that fzf is over to gutenmacs-fzf
     (setq unread-command-events (listify-key-sequence "\n"))))
 
 (defun gutenmacs-fzf (filename)
@@ -65,7 +66,10 @@ fzf search."
 
   (setq gutenmacs-fzf-result nil)
   (while (null gutenmacs-fzf-result)
-    (command-execute (read-key-sequence nil)))
+    (let ((kseq (read-key-sequence nil)))
+      (if (equal kseq "\n") ;; Check for indicator of fzf ended
+	  ()
+	(command-execute kseq))))
 
   gutenmacs-fzf-result)
 

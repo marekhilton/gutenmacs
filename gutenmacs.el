@@ -9,12 +9,22 @@
 
 (require 'gutenmacs-fzf)
 
-(defconst data-dir
-  (let ((dir (expand-file-name "~/.emacs.d/.cache/gutenmacs/data/")))
+(defconst gutenmacs-package-dir
+  (file-name-directory load-file-name))
+(defconst gutenmacs-package-cache
+    (let ((dir (expand-file-name "~/.emacs.d/.cache/gutenmacs/")))
     (unless (file-directory-p dir)
-
       (make-directory dir t))
     dir))
+(defconst gutenmacs-data-dir
+
+  (let ((dir (concat (file-name-as-directory gutenmacs-package-cache)
+		     "data/")))
+    (unless (file-directory-p dir)
+      (make-directory dir t))
+    dir))
+(defconst gutenmacs-strip-executable
+  (concat gutenmacs-package-dir "strip"))
 
 (defconst url-index-name
   "GUTINDEX.ALL")
@@ -31,7 +41,7 @@
   :type 'string
   :group 'gutenmacs)
 (defcustom gutenmacs-index-file
-  (concat (file-name-as-directory data-dir) "index")
+  (concat (file-name-as-directory gutenmacs-data-dir) "index")
   "File containing index"
   :type 'string
   :group 'gutenmacs)
@@ -51,7 +61,10 @@
   (url-copy-file (concat (file-name-as-directory gutenmacs-mirror-url) url-index-name)
 		 gutenmacs-index-file t)
   (shell-command
-   (format "./strip %s | sponge %s" gutenmacs-index-file gutenmacs-index-file)))
+   (format "%s %s | sponge %s"
+	   gutenmacs-strip-executable
+	   gutenmacs-index-file
+	   gutenmacs-index-file)))
 
 (defun gutenmacs ()
   "Main function to search through index file and subsequently

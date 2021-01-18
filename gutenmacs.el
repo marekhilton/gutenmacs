@@ -130,7 +130,7 @@ number into the directory path."
 	 (file-open-funcs (mapcar 'cdr files-info))
 	 (files-labels
 	  (format "\nFILES:\n%s\n\n_q_uit\n" (mapconcat 'car files-info "\n"))))
-    (eval (list* 'defhydra 'gutenmacs-dialog
+    (eval (cl-list* 'defhydra 'gutenmacs-dialog
 		 '(nil nil :foreign-keys nil :hint nil :exit t)
 		 files-labels
 		 '("q" nil)
